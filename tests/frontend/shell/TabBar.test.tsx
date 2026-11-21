@@ -123,7 +123,9 @@ describe("TabBar workspace continuity", () => {
     const { container } = render(<TabBar {...props()} />);
     const tabs = container.querySelectorAll(".group\\/tab");
     expect(tabs.length).toBeGreaterThan(1);
-    tabs.forEach((tab) => expect(tab.className).toContain("rounded-t-[0.625rem]"));
+    tabs.forEach((tab) =>
+      expect(tab.className).toContain("rounded-t-[0.625rem]"),
+    );
   });
 
   it("shows the tools and quick connect buttons when asked", () => {
