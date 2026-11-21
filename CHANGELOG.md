@@ -4,6 +4,14 @@
 
 ### Added
 
-- A tab with notes
-- One admin setting
-- One table with migrations for SQLite, PostgreSQL and MySQL
+- The Termix layout from before 2.3.0: a floating host sidebar, a floating tab bar and a framed tab area
+- A card for each host folder, with sub-folders and sub-hosts inside, that you can fold and that stays folded
+- Host rows with a status dot, buttons for the tools you use most and a menu for the rest
+- Host search by name or with tag:, name:, user:, ip:, port:, folder: and auth:
+- Apps menu in the sidebar with everything the icon rail had
+- Account menu at the bottom of the sidebar with Profile, Admin Settings, Plugins, Settings, theme and Log out
+- Rounded tabs with the open one underlined, plus Tools and Quick Connect buttons in the tab bar
+- Tools sidebar on the right for snippets, history and other panels
+- Original Dark and Original Light themes with the old colors
+- Dashboard with the old header and links, and cards as separate boxes
+- Host Manager, Settings, admin pages, command palette and mobile bar from Classic Layout

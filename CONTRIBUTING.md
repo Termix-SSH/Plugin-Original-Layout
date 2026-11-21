@@ -1,4 +1,4 @@
-# Contributing to Hello World
+# Contributing to Original Layout
 
 ## Development
 
@@ -7,11 +7,21 @@ npm run build      # build into dist/
 npm run test       # run this plugin's tests
 npm run typecheck  # type-check this plugin
 npm run validate   # check manifest.json
-npm run migrations # write migrations after changing src/backend/tables.ts
-npm run pack       # pack dist/ into a .tmxplug
 npm run format     # format the code with Prettier
 ```
 
 ## Docs
 
-The docs for this plugin are in [docs/](docs/), and `docs` in `manifest.json` links to them. Settings, permissions, services, environment variables and the API reference are made from `manifest.json` and the `@openapi` comments in the code, so keep those up to date instead of writing them by hand. See [writing docs](https://docs.termix.site/develop/docs).
+The docs for this plugin are in [docs/](docs/) and are published at https://docs.termix.site/plugins/original-layout. Settings, permissions, services, environment variables and the API reference are made from `manifest.json` and the `@openapi` comments in the code, so keep those up to date instead of writing them by hand. See [writing docs](https://docs.termix.site/develop/docs).
+
+## Settings search
+
+The Settings search reads `src/frontend/settings/settings-search-index.ts`, which is made from the settings sections. After you change one, run:
+
+```bash
+npm run generate:settings-index
+```
+
+## Classic Layout
+
+Original Layout started as a copy of [Classic Layout](https://github.com/Termix-SSH/Plugin-Classic-Layout). The Dashboard, Host Manager, host and credential editors, Settings and admin pages are the same code. When one of those gets a fix in Classic Layout, bring it over here too. The parts that are only here live in `src/frontend/original/`, `src/frontend/layout/OriginalLayout.tsx`, the tab bar and `themes/`.
