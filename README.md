@@ -6,6 +6,12 @@
 
 <p>The Termix layout from before 2.3.0, with a floating sidebar of host folders and a floating tab bar</p>
 
+<!-- VIDEO:START -->
+
+<a href="https://www.youtube.com/watch?v=3lH5TYudQ3g"><img src="https://img.shields.io/badge/Watch_the_demo-f59145?style=for-the-badge&logo=youtube&logoColor=white" alt="Watch the demo on YouTube" /></a>
+
+<!-- VIDEO:END -->
+
 </div>
 
 <br />
