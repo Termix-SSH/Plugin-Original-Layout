@@ -79,7 +79,7 @@ export function FolderSections<T>({
           <section
             key={group.folder}
             aria-label={name}
-            className="rounded-[0.5rem] border border-border"
+            className="shrink-0 rounded-[0.5rem] border border-border"
           >
             <button
               type="button"

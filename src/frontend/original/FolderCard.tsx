@@ -72,7 +72,7 @@ export function FolderCard({
 
   return (
     <section
-      className={`${elevatedBg} overflow-hidden rounded-[0.625rem] border-2 border-border [content-visibility:auto]`}
+      className={`${elevatedBg} shrink-0 overflow-hidden rounded-[0.625rem] border-2 border-border`}
       aria-label={title}
     >
       <div

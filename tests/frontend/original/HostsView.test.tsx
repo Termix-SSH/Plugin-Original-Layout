@@ -91,6 +91,13 @@ afterEach(() => {
 });
 
 describe("HostsView", () => {
+  it("keeps each card's height, so a long list scrolls instead of squashing", () => {
+    renderView();
+    for (const card of screen.getAllByRole("region")) {
+      expect(card.className).toContain("shrink-0");
+    }
+  });
+
   it("draws a card per folder, with loose hosts in their own card first", () => {
     renderView();
     const cards = screen.getAllByRole("region");
