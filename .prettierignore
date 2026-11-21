@@ -8,3 +8,4 @@ locales/translated
 migrations/snapshot.json
 
 src/frontend/settings/settings-search-index.ts
+themes/

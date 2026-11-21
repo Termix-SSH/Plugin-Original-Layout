@@ -2,7 +2,7 @@ import { useLayoutEffect, useRef, type ReactNode } from "react";
 
 /**
  * Holds plugin buttons in the tab bar. A framed button sits at zero width
- * until it loads, so only children with width get a divider.
+ * until it loads, so only children with width get a box.
  */
 export function TabBarActions({ children }: { children: ReactNode }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -37,7 +37,7 @@ export function TabBarActions({ children }: { children: ReactNode }) {
     <div
       ref={ref}
       data-tabbar-actions=""
-      className="flex h-full shrink-0 [&>[data-bar-shown]]:border-r [&>[data-bar-shown]]:border-r-border"
+      className="flex shrink-0 items-center gap-2 empty:hidden [&>[data-bar-shown]]:!h-[30px] [&>[data-bar-shown]]:!w-[30px] [&>[data-bar-shown]]:overflow-hidden [&>[data-bar-shown]]:rounded-[0.5rem] [&>[data-bar-shown]]:border [&>[data-bar-shown]]:border-[color:var(--original-button-border,var(--input))] [&>[data-bar-shown]]:bg-[var(--original-button,var(--muted))]"
     >
       {children}
     </div>

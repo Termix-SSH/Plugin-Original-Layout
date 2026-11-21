@@ -1,4 +1,4 @@
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import {
   Sheet,
   SheetContent,
@@ -24,7 +24,8 @@ import { TabBar } from "../shell/TabBar";
 import { FloatingSidebar } from "../original/FloatingSidebar";
 import { HostsView } from "../original/HostsView";
 import { ToolsSidebar } from "../original/ToolsSidebar";
-import { floatingPanel, reopenStrip } from "../original/styles";
+import { applyLook } from "../original/look-css";
+import { floatingPanel, pageStyle, reopenStrip } from "../original/styles";
 import { OriginalPalette } from "./OriginalPalette";
 const QuickConnectPanel = lazy(() =>
   import("../sidebar/QuickConnectPanel").then((m) => ({
@@ -56,6 +57,7 @@ export function OriginalLayout() {
   const registeredPanels = usePanels();
   const { tabs, regions, hosts, isMobile } = shell;
   const { left, right } = regions;
+  useEffect(() => applyLook(), []);
   const closeOnMobile = () => {
     if (isMobile) left.setOpen(false);
   };
@@ -246,8 +248,11 @@ export function OriginalLayout() {
 
   return (
     <div
-      className="flex flex-col w-screen bg-background"
-      style={{ height: "calc(100dvh - var(--termix-titlebar-height, 0px))" }}
+      className="flex flex-col w-screen"
+      style={{
+        ...pageStyle,
+        height: "calc(100dvh - var(--termix-titlebar-height, 0px))",
+      }}
     >
       {/* Isolated so inline views and prompts in the sidebars stay under
           dialogs on the body. */}

@@ -107,7 +107,7 @@ export function FloatingSidebar({
   return (
     <aside
       aria-label={t("original.sidebar")}
-      className={`${floatingPanel} relative flex min-h-0 flex-col bg-sidebar text-sidebar-foreground ${fill ? "flex-1" : "shrink-0"}`}
+      className={`${floatingPanel} relative flex min-h-0 flex-col text-foreground ${fill ? "flex-1" : "shrink-0"}`}
       style={
         fill
           ? undefined

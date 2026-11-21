@@ -11,7 +11,8 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "prepare": "husky || true",
-    "generate:settings-index": "node scripts/generate-settings-search-index.cjs"
+    "generate:settings-index": "node scripts/generate-settings-search-index.cjs",
+    "generate:themes": "node scripts/generate-themes.mjs"
   },
   "dependencies": {
     "@tanstack/react-virtual": "3.14.26",

@@ -36,7 +36,7 @@ export function ToolsSidebar({
   return (
     <aside
       aria-label={t("original.tools")}
-      className={`${floatingPanel} relative flex min-h-0 shrink-0 flex-col bg-sidebar`}
+      className={`${floatingPanel} relative flex min-h-0 shrink-0 flex-col`}
       style={{
         width: rem(width),
         transition: dragging ? "none" : "width 0.2s",

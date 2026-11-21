@@ -52,7 +52,7 @@ import {
   isFolder,
   parseHostQuery,
 } from "./host-search";
-import { outlineButton } from "./styles";
+import { fieldBg, outlineButton, wideButton } from "./styles";
 
 const COLLAPSED_KEY = "original-layout.collapsedFolders";
 /** The folder card for hosts outside any folder. */
@@ -201,7 +201,7 @@ export function HostsView({
         <button
           type="button"
           onClick={() => requestManage({ kind: "browse", mode: "hosts" })}
-          className={`${outlineButton} h-9 w-full gap-2 text-sm font-semibold`}
+          className={`${wideButton} h-9 w-full gap-2 text-sm font-semibold`}
         >
           <HardDrive className="size-4" strokeWidth={2.5} />
           {t("original.hostManager")}
@@ -209,7 +209,9 @@ export function HostsView({
       </div>
       <div className="h-0.5 shrink-0 bg-border" />
       <div className="flex items-center gap-1.5 p-2">
-        <div className="flex h-8 min-w-0 flex-1 items-center gap-2 rounded-[0.5rem] border-2 border-border bg-background px-2">
+        <div
+          className={`flex h-8 min-w-0 flex-1 items-center gap-2 rounded-[0.5rem] border-2 border-border px-2 ${fieldBg}`}
+        >
           <Search className="size-3.5 shrink-0 text-muted-foreground" />
           <input
             value={search}

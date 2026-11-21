@@ -48,6 +48,8 @@ The Tools button opens a sidebar on the right for panels like snippets and comma
 
 Original Layout comes with two themes, Original Dark and Original Light, made from the colors Termix used before 2.3.0. Original Dark is picked the first time you use the layout. Change it in the account menu or in Settings, Appearance. Other themes work too.
 
+While you use Original Layout, Termix shows the old system font, white highlights and rounded corners, in place of your own font and accent color. Switch back to Classic Layout and your own picks return. The Original themes bring the same look to plugin screens.
+
 ## Same as Classic Layout
 
 The Dashboard, Host Manager, host and credential editors, Settings, admin pages, command palette and the mobile bottom bar work the same as in [Classic Layout](https://docs.termix.site/plugins/classic-layout).

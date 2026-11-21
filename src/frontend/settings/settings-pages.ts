@@ -44,6 +44,8 @@ export interface SettingsPage {
   desktopToo?: boolean;
   /** Left out of the desktop app. */
   browserOnly?: boolean;
+  /** Only in the desktop app. */
+  desktopOnly?: boolean;
   /** The profile section this page shows. */
   profileSection?: string;
   /** The admin section this page shows. */
@@ -106,6 +108,8 @@ export const CORE_SETTINGS_PAGES: SettingsPage[] = [
     labelKey: "settings.interface",
     icon: SlidersHorizontal,
     profileSection: "interface",
+    // Only the desktop app settings are left here without the rail presets.
+    desktopOnly: true,
   }),
   core({
     id: "host-list",
@@ -259,7 +263,8 @@ export function visibleSettingsPages(
         isAdmin ||
         (page.desktopToo && isElectron) ||
         (!!page.permission && has(page.permission))) &&
-      (!page.browserOnly || !isElectron),
+      (!page.browserOnly || !isElectron) &&
+      (!page.desktopOnly || isElectron),
   );
 }
 

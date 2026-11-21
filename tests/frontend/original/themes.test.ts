@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
+import { validateThemeCss } from "@termix-ssh/plugin-sdk/manifest";
 import manifest from "../../../manifest.json";
 
 const root = path.resolve(__dirname, "../../..");
@@ -22,14 +23,17 @@ describe("Original themes", () => {
     ]);
   });
 
-  it.each(themes)("$id only styles its own class", (theme) => {
+  it.each(themes)("$id passes the theme check Termix runs", (theme) => {
     const css = fs.readFileSync(path.join(root, theme.css), "utf8");
-    const selectors = [...css.matchAll(/([^{}]+)\{/g)].map((m) => m[1].trim());
-    expect(selectors.length).toBeGreaterThan(0);
-    for (const selector of selectors) {
-      expect(selector).toBe(`.${theme.id}`);
-    }
-    expect(css).not.toMatch(/@import|url\(|image-set\(/);
+    expect(validateThemeCss(css, theme.id)).toEqual([]);
+  });
+
+  it.each(themes)("$id carries the rounded look for plugin frames", (theme) => {
+    const css = fs.readFileSync(path.join(root, theme.css), "utf8");
+    expect(css).toContain(`.${theme.id} [data-slot="button"]`);
+    expect(css).toMatch(/--font-ui: [^;]*system-ui[^;]*!important;/);
+    expect(css).toMatch(/--accent-brand: #[0-9a-f]{6} !important;/);
+    expect(css).toContain(`.${theme.id} .bg-background`);
   });
 
   it("keeps both themes on the same set of tokens", () => {

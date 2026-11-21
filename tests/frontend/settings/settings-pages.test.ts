@@ -47,6 +47,16 @@ describe("settings pages", () => {
     expect(ids(true, false)).toContain("updates");
   });
 
+  it("shows Interface only in the desktop app, where it has something", () => {
+    const ids = (isElectron: boolean) =>
+      visibleSettingsPages(CORE_SETTINGS_PAGES, {
+        isAdmin: true,
+        isElectron,
+      }).map((page) => page.id);
+    expect(ids(true)).toContain("interface");
+    expect(ids(false)).not.toContain("interface");
+  });
+
   it("shows the host and credential list pages to everyone", () => {
     const ids = visibleSettingsPages(CORE_SETTINGS_PAGES, {
       isAdmin: false,

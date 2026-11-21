@@ -5,15 +5,8 @@ import {
   useActionSlot,
   useIsMobile,
   usePluginStore,
-  Button,
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
   pluginKey,
   Skeleton,
-  Kbd,
-  PanelShell,
   Segmented,
   useConfirm,
   DASHBOARD_CARDS,
@@ -68,7 +61,6 @@ import {
 import {
   Activity,
   Check,
-  CircleHelp,
   Database,
   LayoutGrid,
   Pencil,
@@ -815,7 +807,8 @@ export function DashboardTab({
     const Icon = meta.icon;
     return (
       <TileFrame
-        className="rounded-[0.625rem] border-2 border-border bg-background"
+        // Darker than the dashboard, like v2.2.1. Plugin cards draw see-through.
+        className="rounded-[0.625rem] border-2 border-border bg-[var(--original-elevated,var(--card))]"
         title={card.title ?? meta.label}
         icon={<Icon />}
         bare={meta.frame === "bare" && !editMode}

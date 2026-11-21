@@ -29,14 +29,14 @@ import {
 import { useTranslation } from "@termix-ssh/plugin-sdk/frontend";
 import { canOpenHostEditor } from "../sidebar/host-permissions";
 import { TabBarActions } from "./TabBarActions";
+import { outlineButton } from "../original/styles";
 
 /** Plugins add buttons to the right of the tab bar here, beside split view. */
 export const TAB_BAR_ACTIONS_SLOT = "tabbar.actions";
 // Plugin buttons may draw in a frame, which only has core's classes.
-const TAB_BAR_BUTTON =
-  "h-full w-8 border-2 border-border bg-background text-foreground hover:bg-muted";
-const BAR_BUTTON =
-  "inline-flex size-[30px] shrink-0 items-center justify-center rounded-[0.5rem] border-2 border-border bg-background text-foreground transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring";
+// The box around it comes from TabBarActions.
+const TAB_BAR_BUTTON = "h-full w-8 text-foreground hover:bg-muted";
+const BAR_BUTTON = `${outlineButton} size-[30px]`;
 import {
   ChevronDown,
   ChevronUp,
@@ -53,6 +53,7 @@ import {
   PanelRight,
   MoreHorizontal,
   Hammer,
+  Home,
   Zap,
 } from "lucide-react";
 
@@ -70,7 +71,13 @@ const TAB_MAX_WIDTH = "max-w-[min(16rem,100cqw)] md:max-w-none";
 // The old tabs: the open one is darker and underlined in the text color.
 const ACTIVE_TAB =
   "z-10 bg-[var(--original-deepest,var(--background))] shadow-[inset_0_-2px_0_var(--foreground)]";
-const IDLE_TAB = "bg-background hover:bg-muted/40";
+const IDLE_TAB =
+  "bg-[color-mix(in_oklab,var(--original-deepest,var(--background))_80%,transparent)] hover:bg-[color-mix(in_oklab,var(--original-deepest,var(--background))_90%,transparent)]";
+
+/** The home tab shows a house, like the old bar. */
+function barIcon(type: TabType) {
+  return type === "dashboard" ? <Home className="size-4" /> : tabIcon(type);
+}
 
 /**
  * Tabs holding a live connection that can be refreshed: the registered
@@ -431,7 +438,7 @@ export function TabBar({
                       .length + 1}
                   </span>
                 )}
-                {tabIcon(tab.type)}
+                {barIcon(tab.type)}
                 {tab.type !== "dashboard" && renamingTabId === tab.id ? (
                   <input
                     ref={renameInputRef}
@@ -544,7 +551,7 @@ export function TabBar({
                   }}
                   className={`flex items-center gap-1.5 shrink-0 rounded-t-[0.625rem] border-x-2 border-t-2 border-border px-3 text-sm shadow-lg ${active ? `${ACTIVE_TAB} text-foreground` : "bg-background text-muted-foreground"}`}
                 >
-                  {tabIcon(tab.type)}
+                  {barIcon(tab.type)}
                   {tab.type !== "dashboard" && (
                     <span className="min-w-0 truncate">{tab.label}</span>
                   )}
@@ -607,15 +614,15 @@ export function TabBar({
               ))}
             </DropdownMenuContent>
           </DropdownMenu>
-          <div className="flex h-[30px] shrink-0 overflow-hidden rounded-[0.5rem] empty:hidden">
-            <TabBarActions>
-              <ComponentSlot
-                slotId={TAB_BAR_ACTIONS_SLOT}
-                props={{ targetTab, className: TAB_BAR_BUTTON }}
-              />
-            </TabBarActions>
-          </div>
-          <div className="flex max-md:hidden">
+          <TabBarActions>
+            <ComponentSlot
+              slotId={TAB_BAR_ACTIONS_SLOT}
+              props={{ targetTab, className: TAB_BAR_BUTTON }}
+            />
+          </TabBarActions>
+          <div
+            className={`${BAR_BUTTON} overflow-hidden max-md:hidden [&>button]:!size-full [&>button]:!rounded-none [&>button]:!bg-transparent`}
+          >
             <SplitLayoutMenu
               activeIsSplit={activeIsSplit}
               canAddPane={!activeSplitFull}

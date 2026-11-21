@@ -13,5 +13,6 @@
 - Rounded tabs with the open one underlined, plus Tools and Quick Connect buttons in the tab bar
 - Tools sidebar on the right for snippets, history and other panels
 - Original Dark and Original Light themes with the old colors
+- The old system font, white highlights and rounded corners while the layout or an Original theme is on
 - Dashboard with the old header and links, and cards as separate boxes
 - Host Manager, Settings, admin pages, command palette and mobile bar from Classic Layout

@@ -27,7 +27,6 @@ import {
   useHostContextMenuItems,
   useHostStatus,
   useHostStatusIndicators,
-  useStatusColorScheme,
   type Host,
   type HostActionDef,
   type TabShellCallbacks,
@@ -80,7 +79,7 @@ interface RowEntry {
 }
 
 const buttonClass =
-  "inline-flex size-8 items-center justify-center border-2 border-border bg-background text-foreground transition-colors hover:bg-muted focus-visible:relative focus-visible:z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring [&:not(:first-child)]:-ml-0.5 first:rounded-l-[0.5rem] last:rounded-r-[0.5rem]";
+  "inline-flex size-8 items-center justify-center border border-[color:var(--original-button-border,var(--input))] bg-[var(--original-elevated,var(--background))] text-foreground transition-colors hover:bg-[var(--original-button-hover,var(--accent))] focus-visible:relative focus-visible:z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring [&:not(:first-child)]:-ml-px first:rounded-l-[0.5rem] last:rounded-r-[0.5rem]";
 
 /** One host in a folder card, drawn the way v2.2.1 did. */
 export function HostRow({
@@ -113,7 +112,6 @@ export function HostRow({
   const badges = hostBadgesFor(useHostBadges(), host);
   const indicators = hostStatusIndicatorsFor(useHostStatusIndicators(), host);
   const menuItems = hostMenuItemsFor(useHostContextMenuItems(), host);
-  const statusScheme = useStatusColorScheme();
   const statusOn = host.statusCheckEnabled !== false;
   const status = useHostStatus(Number(host.id), statusOn) ?? "offline";
 
@@ -242,7 +240,7 @@ export function HostRow({
             role="img"
             aria-label={t(`original.status.${status}`)}
             title={t(`original.status.${status}`)}
-            className={`size-2 shrink-0 rounded-full ${getStatusClasses(status, statusScheme, "dot")}`}
+            className={`size-2 shrink-0 rounded-full ${getStatusClasses(status, "status", "dot")}`}
           />
         )}
         <button
