@@ -3,8 +3,6 @@ import {
   Button,
   EmptyState,
   FakeSwitch,
-  BackButton,
-  PanelShell,
   useConfirm,
   useUiPreference,
   usePermissions,
@@ -28,11 +26,10 @@ import {
   takePendingManageRequest,
   type ManageMode,
   type ManageRequest,
-  docsUrl,
   cn,
 } from "@termix-ssh/plugin-sdk/ui";
 import { useTranslation } from "@termix-ssh/plugin-sdk/frontend";
-import { KeyRound, LibraryBig, Plus, Server, Trash2 } from "lucide-react";
+import { Server, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import type { HostDraft } from "@termix-ssh/plugin-sdk/frontend";
 import { HostEditor } from "../sidebar/HostEditor";
@@ -45,6 +42,10 @@ import {
 import { canDeleteHost } from "../sidebar/host-permissions";
 import { useHostPolicy } from "../sidebar/use-host-policy";
 import { ManageList } from "./ManageList";
+import { duplicateHost } from "../sidebar/duplicate-host";
+import { ManagerTabs, type ManagerView } from "../original/manager/ManagerTabs";
+import { HostViewer } from "../original/manager/HostViewer";
+import { CredentialViewer } from "../original/manager/CredentialViewer";
 import type { DefaultsRow } from "./defaults-rows";
 
 type Editing =
@@ -350,38 +351,57 @@ export function ManageTab() {
     await openCredential(cred);
   };
 
+  const deleteHost = async (host: Host) => {
+    const ok = await confirm({
+      title: t("hosts.deleteHostConfirm", { name: host.name || host.ip }),
+      description: t("manage.cannotBeUndone"),
+    });
+    if (!ok) return;
+    try {
+      await deleteSSHHost(Number(host.id));
+      setHosts((prev) => prev.filter((h) => h.id !== host.id));
+      window.dispatchEvent(new CustomEvent("termix:hosts-changed"));
+      toast.success(t("hosts.deletedCount", { count: 1 }));
+      if (editing?.kind === "host" && editing.host?.id === host.id) close();
+    } catch {
+      toast.error(t("hosts.failedToDeleteCount", { count: 1 }));
+    }
+  };
+
+  const deleteCredentialItem = async (cred: Credential) => {
+    const ok = await confirm({
+      title: t("credentials.deleteCredentialConfirm", { name: cred.name }),
+      description: t("manage.cannotBeUndone"),
+    });
+    if (!ok) return;
+    try {
+      await deleteCredential(Number(cred.id));
+      setCredentials((prev) => prev.filter((c) => c.id !== cred.id));
+      window.dispatchEvent(new CustomEvent("termix:credentials-changed"));
+      toast.success(t("credentials.deletedCredential", { name: cred.name }));
+      if (editing?.kind === "credential" && editing.credential?.id === cred.id)
+        close();
+    } catch {
+      toast.error(t("credentials.failedToDeleteCredential"));
+    }
+  };
+
   const deleteCurrent = async () => {
     if (editing?.kind === "host" && editing.host) {
-      const host = editing.host;
-      const ok = await confirm({
-        title: t("hosts.deleteHostConfirm", { name: host.name || host.ip }),
-        description: t("manage.cannotBeUndone"),
-      });
-      if (!ok) return;
-      try {
-        await deleteSSHHost(Number(host.id));
-        window.dispatchEvent(new CustomEvent("termix:hosts-changed"));
-        toast.success(t("hosts.deletedCount", { count: 1 }));
-        close();
-      } catch {
-        toast.error(t("hosts.failedToDeleteCount", { count: 1 }));
-      }
+      await deleteHost(editing.host);
     } else if (editing?.kind === "credential" && editing.credential) {
-      const cred = editing.credential;
-      const ok = await confirm({
-        title: t("credentials.deleteCredentialConfirm", { name: cred.name }),
-        description: t("manage.cannotBeUndone"),
-      });
-      if (!ok) return;
-      try {
-        await deleteCredential(Number(cred.id));
-        setCredentials((prev) => prev.filter((c) => c.id !== cred.id));
-        window.dispatchEvent(new CustomEvent("termix:credentials-changed"));
-        toast.success(t("credentials.deletedCredential", { name: cred.name }));
-        close();
-      } catch {
-        toast.error(t("credentials.failedToDeleteCredential"));
-      }
+      await deleteCredentialItem(editing.credential);
+    }
+  };
+
+  const cloneHost = async (host: Host) => {
+    try {
+      await duplicateHost(host, t);
+      await reloadHosts();
+      window.dispatchEvent(new CustomEvent("termix:hosts-changed"));
+      toast.success(t("hosts.duplicatedHost", { name: host.name }));
+    } catch {
+      toast.error(t("hosts.failedToDuplicateHost"));
     }
   };
 
@@ -411,22 +431,6 @@ export function ManageTab() {
           ? `c:${editing.credential.id}`
           : null
         : editing.rowKey;
-
-  const status = !editing
-    ? mode === "hosts"
-      ? t("manage.hostCount", { count: hosts.length })
-      : mode === "credentials"
-        ? t("manage.credentialCount", { count: credentials.length })
-        : t("manage.defaults")
-    : editing.kind === "host"
-      ? editing.host
-        ? editing.host.name || editing.host.ip
-        : t("manage.newHost")
-      : editing.kind === "credential"
-        ? editing.credential
-          ? editing.credential.name
-          : t("manage.newCredential")
-        : hostDefaultsTitle(editing.target, t);
 
   const canDelete =
     (editing?.kind === "host" &&
@@ -519,37 +523,45 @@ export function ManageTab() {
     );
   };
 
-  return (
-    <PanelShell
-      icon={<LibraryBig className="size-4" />}
-      title={t("nav.manage")}
-      status={status}
-      scroll={false}
-      docs={docsUrl(
-        mode === "credentials"
-          ? "credentials"
-          : mode === "hosts"
-            ? "hosts"
-            : "hostDefaults",
-      )}
-      leading={
-        editing ? (
-          <span className={split ? "hidden" : "flex h-full"}>
-            <BackButton
-              onClick={() =>
-                void guarded(
-                  editing.kind === "credential" ? backFromCredential : close,
-                )()
-              }
-            />
-          </span>
-        ) : undefined
+  const view: ManagerView =
+    editing?.kind === "host"
+      ? "host-editor"
+      : editing?.kind === "credential"
+        ? "credential-editor"
+        : mode === "defaults" || editing?.kind === "defaults"
+          ? "defaults"
+          : mode === "credentials"
+            ? "credentials"
+            : "hosts";
+
+  const pick = (next: ManagerView) => {
+    if (next === view) return;
+    void guarded(() => {
+      if (next === "host-editor") openHost(null);
+      else if (next === "credential-editor") void openCredential(null);
+      else {
+        close();
+        setMode(next);
       }
-      actions={
-        <>
+    })();
+  };
+
+  return (
+    <div className="flex min-h-0 flex-1 flex-col bg-background text-foreground">
+      <div className="flex flex-wrap items-center gap-2 px-3 pt-3">
+        <ManagerTabs
+          view={view}
+          editingHost={editing?.kind === "host" && !!editing.host}
+          editingCredential={
+            editing?.kind === "credential" && !!editing.credential
+          }
+          canAddHost={hostPolicy.manualCreate}
+          onPick={pick}
+        />
+        <div className="ml-auto flex items-center gap-2">
           {editing?.kind === "host" && (
             <label className="flex items-center gap-2 px-1">
-              <span className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">
+              <span className="text-xs text-muted-foreground">
                 {t("manage.advanced")}
               </span>
               <FakeSwitch checked={advanced} onChange={setAdvanced} />
@@ -567,83 +579,91 @@ export function ManageTab() {
               <Trash2 className="size-3.5" />
             </Button>
           )}
-        </>
-      }
-    >
-      <div ref={bodyRef} className="flex min-h-0 flex-1">
-        <ManageList
-          editing={!!editing}
-          split={split}
-          mode={mode}
-          onMode={(next) =>
-            void guarded(() => {
-              setMode(next);
-              close();
-            })()
-          }
-          hosts={hosts}
-          credentials={credentials}
-          canEditInstanceDefaults={has("admin.settings.manage")}
-          isOnline={isOnline}
-          selectedKey={selectedKey}
-          onPickHost={(host) => void guarded(() => openHost(host))()}
-          onPickCredential={(cred) =>
-            void guarded(() => void openCredential(cred))()
-          }
-          onPickDefaults={(row) => void guarded(() => void openDefaults(row))()}
-          onAdd={() =>
-            void guarded(() =>
-              mode === "credentials"
-                ? void openCredential(null)
-                : openHost(null),
-            )()
-          }
-        />
-
-        {editing ? (
-          <div className="flex min-h-0 min-w-0 flex-1 flex-col">
-            {renderEditor()}
-          </div>
-        ) : (
-          <div
-            className={cn(
-              "min-h-0 flex-1 items-center justify-center",
-              split ? "flex" : "hidden",
-            )}
-          >
-            <EmptyState
-              icon={mode === "credentials" ? KeyRound : Server}
-              title={
-                mode === "hosts"
-                  ? t("manage.pickHost")
-                  : mode === "credentials"
-                    ? t("manage.pickCredential")
-                    : t("manage.pickDefaults")
-              }
-              hint={t("manage.pickHint")}
-              action={
-                mode !== "defaults" &&
-                (mode !== "hosts" || hostPolicy.manualCreate) ? (
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() =>
-                      mode === "hosts"
-                        ? openHost(null)
-                        : void openCredential(null)
-                    }
-                  >
-                    <Plus className="mr-1 size-3" />
-                    {mode === "hosts"
-                      ? t("hosts.addHost")
-                      : t("manage.addCredential")}
-                  </Button>
-                ) : undefined
-              }
-            />
-          </div>
-        )}
+        </div>
       </div>
-    </PanelShell>
+      <div className="mx-3 mt-3 h-0.5 shrink-0 bg-border" />
+
+      {view === "hosts" && (
+        <div className="flex min-h-0 flex-1 flex-col p-3">
+          <HostViewer
+            hosts={hosts}
+            canAdd={hostPolicy.manualCreate}
+            onAdd={() => openHost(null)}
+            onEdit={(host) => openHost(host)}
+            onDuplicate={(host) => void cloneHost(host)}
+            onDelete={(host) => void deleteHost(host)}
+            onRefresh={() => {
+              invalidateHostsAndStatusCaches();
+              void reloadHosts();
+            }}
+          />
+        </div>
+      )}
+
+      {view === "credentials" && (
+        <div className="flex min-h-0 flex-1 flex-col p-3">
+          <CredentialViewer
+            credentials={credentials}
+            onAdd={() => void openCredential(null)}
+            onEdit={(cred) => void openCredential(cred)}
+            onDelete={(cred) => void deleteCredentialItem(cred)}
+            onRefresh={() => void reloadCredentials()}
+          />
+        </div>
+      )}
+
+      {(view === "host-editor" || view === "credential-editor") && (
+        <div className="flex min-h-0 min-w-0 flex-1 flex-col">
+          {renderEditor()}
+        </div>
+      )}
+
+      {view === "defaults" && (
+        <div ref={bodyRef} className="flex min-h-0 flex-1">
+          <ManageList
+            editing={!!editing}
+            split={split}
+            mode={mode}
+            onMode={(next) =>
+              void guarded(() => {
+                setMode(next);
+                close();
+              })()
+            }
+            hosts={hosts}
+            credentials={credentials}
+            canEditInstanceDefaults={has("admin.settings.manage")}
+            isOnline={isOnline}
+            selectedKey={selectedKey}
+            onPickHost={(host) => void guarded(() => openHost(host))()}
+            onPickCredential={(cred) =>
+              void guarded(() => void openCredential(cred))()
+            }
+            onPickDefaults={(row) =>
+              void guarded(() => void openDefaults(row))()
+            }
+            onAdd={() => void guarded(() => openHost(null))()}
+          />
+          {editing?.kind === "defaults" ? (
+            <div className="flex min-h-0 min-w-0 flex-1 flex-col">
+              {renderEditor()}
+            </div>
+          ) : (
+            <div
+              className={cn(
+                "min-h-0 flex-1 items-center justify-center",
+                split ? "flex" : "hidden",
+              )}
+            >
+              <EmptyState
+                icon={Server}
+                title={t("manage.pickDefaults")}
+                hint={t("manage.pickHint")}
+              />
+            </div>
+          )}
+        </div>
+      )}
+    </div>
   );
 }

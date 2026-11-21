@@ -9,7 +9,7 @@
   },
   "tab": {
     "dashboard": "Dashboard",
-    "manage": "Manage",
+    "manage": "Host Manager",
     "settings": "Settings"
   },
   "common": {
@@ -1048,6 +1048,34 @@
     "commandPalette": "Command palette",
     "logout": "Log out",
     "tools": "Tools",
-    "quickConnect": "Quick Connect"
+    "quickConnect": "Quick Connect",
+    "manager": {
+      "hostViewer": "Host Viewer",
+      "addHost": "Add Host",
+      "editHost": "Edit Host",
+      "credentialsViewer": "Credentials Viewer",
+      "addCredential": "Add Credential",
+      "editCredential": "Edit Credential",
+      "defaults": "Defaults",
+      "sshHosts": "SSH Hosts",
+      "sshCredentials": "SSH Credentials",
+      "hostCount_one": "{{count}} host",
+      "hostCount_other": "{{count}} hosts",
+      "credentialCount_one": "{{count}} credential",
+      "credentialCount_other": "{{count}} credentials",
+      "searchHosts": "Search hosts by name, user, address, folder or tag:",
+      "searchCredentials": "Search credentials by name, user or tag",
+      "noHosts": "No hosts yet. Add one to get started.",
+      "noCredentials": "No credentials yet.",
+      "export": "Export as JSON",
+      "clone": "Clone",
+      "delete": "Delete",
+      "shared": "Shared with you",
+      "status": "Status",
+      "statusEvery": "Status: {{seconds}}s",
+      "sshKey": "SSH key",
+      "password": "Password",
+      "moreTools": "+{{count}}"
+    }
   }
 }

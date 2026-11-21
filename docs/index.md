@@ -40,6 +40,17 @@ Open tabs sit in a floating bar at the top, with the Dashboard first. Drag a tab
 
 The buttons on the right are, in order: a list of every open tab, buttons that plugins add, split view, Tools, Quick Connect, a menu with full screen, and a button that hides the bar. When the bar is hidden a thin strip stays at the top. Click it to bring the bar back.
 
+## Host Manager
+
+The Host Manager has tabs across the top, like before 2.3.0:
+
+- Host Viewer: your hosts as cards, one section per folder. Each card shows the address, user, the tools the host has and its status check. Buttons on the card export it as JSON (without passwords or keys), clone it, edit it or delete it. Fold a section with its header.
+- Add Host: the host editor. While you edit a host it reads Edit Host.
+- Credentials Viewer and Add Credential: the same for credentials.
+- Defaults: the host defaults for you, a folder or everyone.
+
+Search the hosts the same way as in the sidebar, with plain words or fields like tag: and user:.
+
 ## Tools
 
 The Tools button opens a sidebar on the right for panels like snippets and command history. When more than one panel can go there, pick one with the buttons across the top.
@@ -52,7 +63,7 @@ While you use Original Layout, Termix shows the old system font, white highlight
 
 ## Same as Classic Layout
 
-The Dashboard, Host Manager, host and credential editors, Settings, admin pages, command palette and the mobile bottom bar work the same as in [Classic Layout](https://docs.termix.site/plugins/classic-layout).
+The Dashboard data, host and credential editors, Settings, admin pages, command palette and the mobile bottom bar work the same as in [Classic Layout](https://docs.termix.site/plugins/classic-layout).
 
 Branding (app name, tagline and logo) is set in Classic Layout's admin settings. Original Layout shows it but has no page to change it.
 

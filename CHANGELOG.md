@@ -15,4 +15,5 @@
 - Original Dark and Original Light themes with the old colors
 - The old system font, white highlights and rounded corners while the layout or an Original theme is on
 - Dashboard with the old header and links, and cards as separate boxes
-- Host Manager, Settings, admin pages, command palette and mobile bar from Classic Layout
+- Host Manager with Host Viewer, Add Host, Credentials Viewer and Add Credential tabs, and cards in folder sections
+- Settings, admin pages, host and credential editors, command palette and mobile bar from Classic Layout
