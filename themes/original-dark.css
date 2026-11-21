@@ -103,6 +103,32 @@ html.original-dark[data-frame-on="sidebar"] {
   border-radius: 0.5rem;
 }
 
+.original-dark [data-slot="tab-strip-list"],
+.original-dark [data-slot="tabs-list"] {
+  gap: 2px;
+  padding: 3px;
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  background: var(--original-field, var(--muted));
+}
+
+.original-dark [data-slot="tab-strip-list"] {
+  margin: 4px 0;
+}
+
+.original-dark button[data-slot="tab-strip-tab"],
+.original-dark button[data-slot="tabs-trigger"] {
+  border: 0 !important;
+  border-radius: 0.375rem !important;
+}
+
+.original-dark button[data-slot="tab-strip-tab"][data-state="active"],
+.original-dark button[data-slot="tabs-trigger"][data-state="active"] {
+  background: var(--background);
+  color: var(--foreground);
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.25);
+}
+
 .original-dark button[role="switch"],
 .original-dark button[role="switch"] > span,
 .original-dark [data-slot="switch"],

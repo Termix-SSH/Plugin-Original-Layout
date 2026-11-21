@@ -59,6 +59,11 @@ export function lookCss(scope: string, accent: string): string {
     `${scope} [data-slot="checkbox"] {\n  border-radius: 0.25rem;\n}`,
     // Plain controls that did not pick their own corners, or picked square.
     `${scope} :is(button, select, textarea, [role="combobox"], input:not([type="checkbox"]):not([type="radio"]):not([type="range"])):is(:not([class*="rounded-"]), [class*="rounded-none"]) {\n  border-radius: 0.5rem;\n}`,
+    // Sub-tabs as the old rounded group: the open one a raised box, no underline.
+    `${scope} [data-slot="tab-strip-list"],\n${scope} [data-slot="tabs-list"] {\n  gap: 2px;\n  padding: 3px;\n  border: 1px solid var(--border);\n  border-radius: 0.5rem;\n  background: var(--original-field, var(--muted));\n}`,
+    `${scope} [data-slot="tab-strip-list"] {\n  margin: 4px 0;\n}`,
+    `${scope} button[data-slot="tab-strip-tab"],\n${scope} button[data-slot="tabs-trigger"] {\n  border: 0 !important;\n  border-radius: 0.375rem !important;\n}`,
+    `${scope} button[data-slot="tab-strip-tab"][data-state="active"],\n${scope} button[data-slot="tabs-trigger"][data-state="active"] {\n  background: var(--background);\n  color: var(--foreground);\n  box-shadow: 0 1px 2px rgb(0 0 0 / 0.25);\n}`,
     `${scope} button[role="switch"],\n${scope} button[role="switch"] > span,\n${scope} [data-slot="switch"],\n${scope} [data-slot="switch-thumb"] {\n  border-radius: 9999px;\n}`,
   ].join("\n\n");
 }

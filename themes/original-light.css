@@ -103,6 +103,32 @@ html.original-light[data-frame-on="sidebar"] {
   border-radius: 0.5rem;
 }
 
+.original-light [data-slot="tab-strip-list"],
+.original-light [data-slot="tabs-list"] {
+  gap: 2px;
+  padding: 3px;
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  background: var(--original-field, var(--muted));
+}
+
+.original-light [data-slot="tab-strip-list"] {
+  margin: 4px 0;
+}
+
+.original-light button[data-slot="tab-strip-tab"],
+.original-light button[data-slot="tabs-trigger"] {
+  border: 0 !important;
+  border-radius: 0.375rem !important;
+}
+
+.original-light button[data-slot="tab-strip-tab"][data-state="active"],
+.original-light button[data-slot="tabs-trigger"][data-state="active"] {
+  background: var(--background);
+  color: var(--foreground);
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.25);
+}
+
 .original-light button[role="switch"],
 .original-light button[role="switch"] > span,
 .original-light [data-slot="switch"],

@@ -38,6 +38,16 @@ describe("lookCss", () => {
     );
   });
 
+  it("draws sub-tabs as the old rounded group", () => {
+    expect(css).toContain('.x [data-slot="tab-strip-list"]');
+    expect(css).toContain('.x [data-slot="tabs-list"]');
+    expect(css).toMatch(
+      /\.x button\[data-slot="tab-strip-tab"\]\[data-state="active"\],[\s\S]*?background: var\(--background\);/,
+    );
+    // No underline on the open tab.
+    expect(css).toContain("border: 0 !important;");
+  });
+
   it("makes switches pills, like the old ones", () => {
     expect(css).toMatch(
       /\.x button\[role="switch"\],[\s\S]*?border-radius: 9999px;/,
